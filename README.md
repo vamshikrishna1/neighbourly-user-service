@@ -1,2 +1,2 @@
-# neighbourly-user-service
+# neighbourly-userDto-service
 User Management Microservice

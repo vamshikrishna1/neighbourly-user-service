@@ -1,6 +1,6 @@
 package com.neighbourly.userservice.util;
 
-import com.neighbourly.userservice.dto.UserDto;
+import com.neighbourly.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 

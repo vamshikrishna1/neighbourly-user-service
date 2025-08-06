@@ -1,4 +1,4 @@
-package com.neighbourly.userservice.dto;
+package com.neighbourly.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

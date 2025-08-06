@@ -1,4 +1,4 @@
-package com.neighbourly.userservice.dto;
+package com.neighbourly.user.dto;
 
 
 import lombok.Data;
@@ -12,7 +12,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String community;
+
     private String flatNo;
     private String remarks;
     private boolean active;

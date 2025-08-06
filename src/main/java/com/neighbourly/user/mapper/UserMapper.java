@@ -1,7 +1,7 @@
-package com.neighbourly.userservice.mapper;
+package com.neighbourly.user.mapper;
 
-import com.neighbourly.userservice.dto.UserDto;
-import com.neighbourly.userservice.entity.User;
+import com.neighbourly.user.entity.User;
+import com.neighbourly.user.dto.UserDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

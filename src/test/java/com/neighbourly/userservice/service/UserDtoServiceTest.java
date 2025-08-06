@@ -1,6 +1,7 @@
 package com.neighbourly.userservice.service;
 
-import com.neighbourly.userservice.dto.UserDto;
+import com.neighbourly.user.dto.UserDto;
+import com.neighbourly.user.service.UserService;
 import com.neighbourly.userservice.util.TestUtil;
 
 import org.hamcrest.CoreMatchers;

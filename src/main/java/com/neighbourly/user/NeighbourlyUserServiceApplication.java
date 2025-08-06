@@ -1,4 +1,4 @@
-package com.neighbourly.userservice;
+package com.neighbourly.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,6 +1,6 @@
-package com.neighbourly.userservice.entity;
+package com.neighbourly.user.entity;
 
-import com.neighbourly.userservice.constants.Role;
+import com.neighbourly.user.constants.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

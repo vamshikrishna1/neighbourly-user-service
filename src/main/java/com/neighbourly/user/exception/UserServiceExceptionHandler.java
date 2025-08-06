@@ -1,6 +1,6 @@
-package com.neighbourly.userservice.exception;
+package com.neighbourly.user.exception;
 
-import com.neighbourly.userservice.dto.ErrorResponse;
+import com.neighbourly.user.dto.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
-package com.neighbourly.userservice.controller;
+package com.neighbourly.user.controller;
 
-import com.neighbourly.userservice.dto.UserDto;
-import com.neighbourly.userservice.dto.UserResponse;
-import com.neighbourly.userservice.service.UserService;
+import com.neighbourly.user.dto.UserDto;
+import com.neighbourly.user.dto.UserResponse;
+import com.neighbourly.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
-package com.neighbourly.userservice.repository;
+package com.neighbourly.user.repository;
 
-import com.neighbourly.userservice.entity.User;
+import com.neighbourly.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

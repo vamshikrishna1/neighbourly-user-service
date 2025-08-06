@@ -1,4 +1,4 @@
-package com.neighbourly.userservice.exception;
+package com.neighbourly.user.exception;
 
 public class UserNotFoundException extends RuntimeException{
 

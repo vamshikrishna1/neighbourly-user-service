@@ -7,3 +7,6 @@ Neighbourly User Service
 3. DELETE /users/{userId}
 
 4. GET /users/{userId}
+
+Seach by emai id
+5. GET /users?email=<emaiId>

@@ -1,20 +1,19 @@
 package com.neighbourly.user.entity;
 
-import com.neighbourly.user.constants.Role;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
-@EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User extends Auditable{
 
     @Id
     @GeneratedValue
@@ -27,14 +26,17 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String community;
-    private String flatNo;
-    private String remarks;
+    private Long communityId;
+    @Embedded
+    private Address address;
     private boolean active;
-    private Set<Role> roles;
-    @CreatedDate
-    private LocalDateTime createdOnTime;
-    private LocalDateTime lastLoginTime;
-    @LastModifiedDate
-    private LocalDateTime lastUpdatedTime;
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles=new HashSet<>();
+
+
 }

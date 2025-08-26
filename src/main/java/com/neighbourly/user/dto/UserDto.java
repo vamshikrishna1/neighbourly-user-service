@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,7 +22,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private Long communityId;
+    private List<Long> communityId;
     private AddressDto address;
     private boolean active;
     private Set<RoleDto> roles=new HashSet<>();

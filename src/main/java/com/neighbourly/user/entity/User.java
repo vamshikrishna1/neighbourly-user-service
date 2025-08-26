@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -26,7 +27,7 @@ public class User extends Auditable{
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private Long communityId;
+    private List<Long> communityId;
     @Embedded
     private Address address;
     private boolean active;

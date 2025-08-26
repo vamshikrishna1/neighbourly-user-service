@@ -8,11 +8,15 @@ import com.neighbourly.user.exception.RoleNotFoundException;
 import com.neighbourly.user.mapper.RoleMapper;
 import com.neighbourly.user.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +26,12 @@ public class RoleService {
     private final RoleMapper roleMapper;
     private final RoleRepository roleRepository;
 
-    public Response<List<RoleDto>> getAllRoles(HeaderInfo headers) {
-        List<Role> roles =  roleRepository.findAll();
+    public Response<List<RoleDto>> getAllRoles(String name, HeaderInfo headers) {
+
+        Role role = new Role();
+        role.setRoleName(name);
+        List<Role> roles = roleRepository.findAll(Example.of(role));
+
         return Response.<List<RoleDto>>builder()
                 .data(roleMapper.toDtoList(roles))
                 .uuid(headers.getUuid())

@@ -83,10 +83,10 @@ public class UserService {
 
         if (!isEmpty(email)) {
             Optional<User> userOpt = userRepository.findByEmail(email);
-            User user = userOpt.orElseThrow(() -> new UserNotFoundException(MessageFormat.format("User with email: {0} not found", email)));
-            UserDto userDto = userMapper.toDto(user);
+            List<UserDto> userDtoList = userOpt.map(userMapper::toDto).map(List::of).orElse(List.of());
+
             return Response.<List<UserDto>>builder()
-                    .data(List.of(userDto))
+                    .data( userDtoList)
                     .uuid(headers.getUuid())
                     .build();
         }

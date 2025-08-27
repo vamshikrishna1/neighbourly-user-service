@@ -4,8 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum REQUIRED_HEADERS {
-    UUID("UUID"),
-    USER_ID("USER_ID");
+    UUID("UUID");
 
     private final String value;
 

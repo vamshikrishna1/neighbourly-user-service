@@ -1,6 +1,7 @@
 package com.neighbourly.user.service;
 
 
+import com.neighbourly.user.constants.SUBSCRIPTON_STATUS;
 import com.neighbourly.user.dto.HeaderInfo;
 import com.neighbourly.user.dto.Response;
 import com.neighbourly.user.dto.RoleDto;
@@ -30,11 +31,12 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final SubscriptionRoleService subscriptionRoleService;
+    private final SubscriptionService subscriptionService;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
-    private final RoleMapper roleMapper;
 
+    @Transactional
     public Response<UserDto> createUser(UserDto userDto, HeaderInfo headers) {
 
         Optional<User> existingUserOpt = userRepository.findByEmail(userDto.getEmail());
@@ -44,7 +46,14 @@ public class UserService {
 
         var userEntity = userMapper.toEntity(userDto);
         User createdUserEntity = userRepository.save(userEntity);
-        UserDto createdUserDto = userMapper.toDto(createdUserEntity);
+
+        if(userDto.isSubscribed()){
+            subscriptionService.assignBasicSubscriptionToUser(createdUserEntity, headers);
+        }
+
+        Set<String> roles = fetchUserRoles(createdUserEntity);
+
+        UserDto createdUserDto = userMapper.toDtoWithRoles(createdUserEntity, roles);
         return Response.<UserDto>builder()
                 .data(createdUserDto)
                 .uuid(headers.getUuid())
@@ -55,11 +64,25 @@ public class UserService {
     public Response<UserDto> getUser(Long userId, HeaderInfo headers) {
         Optional<User> userOpt = userRepository.findById(userId);
         User user = userOpt.orElseThrow(() -> new UserNotFoundException(MessageFormat.format("User with id: {0} not found", userId)));
-        UserDto userDto = userMapper.toDto(user);
+        Set<String> roles = fetchUserRoles(user);
+        UserDto userDto = userMapper.toDtoWithRoles(user,roles);
         return Response.<UserDto>builder()
                 .data(userDto)
                 .uuid(headers.getUuid())
                 .build();
+    }
+
+    private Set<String> fetchUserRoles(User user) {
+        Set<Long> subscriptionIds = fetchSubscriptionIds(user);
+        return subscriptionRoleService.getRoleNamesBySubscriptionIds(subscriptionIds);
+    }
+
+    private static Set<Long> fetchSubscriptionIds(User user) {
+        return user.getUserSubscriptions().stream()
+                .filter(us -> us.getStatus() == SUBSCRIPTON_STATUS.ACTIVE)
+                .filter(us -> us.getEndDate().isAfter(java.time.LocalDateTime.now()))
+                .map(us -> us.getSubscription().getId())
+                .collect(Collectors.toSet());
     }
 
 
@@ -100,37 +123,11 @@ public class UserService {
     }
 
 
-
-
-
-
     @Transactional
-    public Response<UserDto> updateUserRoles(Long userId, List<RoleDto> roleDtos, HeaderInfo headers) {
+    public void assignSubscriptionToUser(Long userId, Long subscriptionId, HeaderInfo headers) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(MessageFormat.format("User with id: {0} not found", userId)));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        Set<Long> roleIds = roleDtos.stream().map(RoleDto::getId).collect(Collectors.toSet());
-        Set<Role> roles = new HashSet<>(roleRepository.findAllById(roleIds));
-        user.setRoles(roles);
-
-        return Response.<UserDto>builder()
-                .data(userMapper.toDto(user))
-                .uuid(headers.getUuid())
-                .build();
-    }
-
-    public Response<UserDto> addRoleToUser(Long userId, Long roleId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(MessageFormat.format("User with id: {0} not found", userId)));
-
-        Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new UserNotFoundException(MessageFormat.format("Role with id: {0} not found", roleId)));
-
-        user.getRoles().add(role);
-        userRepository.save(user);
-
-        return Response.<UserDto>builder()
-                .data(userMapper.toDto(user))
-                .build();
+        subscriptionService.assignSubscriptionToUser(user, subscriptionId, headers);
     }
 }

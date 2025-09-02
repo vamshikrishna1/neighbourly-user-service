@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Data
 public class UserDto {
-    private Long userId;
+    private Long id;
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email cannot be blank")
     private String email;
@@ -25,9 +25,10 @@ public class UserDto {
     private List<Long> communityId;
     private AddressDto address;
     private boolean active;
-    private Set<RoleDto> roles=new HashSet<>();
     private String createdBy;
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+    private Set<String> roles;
+    private boolean isSubscribed;
 }

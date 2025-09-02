@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {RoleMapper.class})
 public interface UserMapper {
@@ -22,4 +23,11 @@ public interface UserMapper {
                 .map(this::toDto)
                 .toList();
     }
+
+    default UserDto toDtoWithRoles(User user, Set<String> roles) {
+        UserDto userDto = toDto(user);
+        userDto.setRoles(roles);
+        return userDto;
+    }
+
 }

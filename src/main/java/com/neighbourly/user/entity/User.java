@@ -1,9 +1,7 @@
 package com.neighbourly.user.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +16,7 @@ public class User extends Auditable{
 
     @Id
     @GeneratedValue
-    private Long userId;
+    private Long id;
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)
@@ -31,13 +29,9 @@ public class User extends Auditable{
     @Embedded
     private Address address;
     private boolean active;
-    @ManyToMany
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles=new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserSubscription> userSubscriptions = new HashSet<>();
 
 
 }

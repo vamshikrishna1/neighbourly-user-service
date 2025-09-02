@@ -53,19 +53,15 @@ public class UserController {
     }
 
 
-    @PostMapping("/{userId}/roles/{roleId}")
-    public ResponseEntity<Response<UserDto>> addRoleToUser(HeaderInfo headers, @PathVariable Long userId,
-                                                            @PathVariable Long roleId) {
-        Response<UserDto> response = userService.addRoleToUser(userId, roleId);
-        return ResponseEntity.ok(response);
+    @PostMapping("/{userId}/subscriptions/{subscriptionId}")
+    public ResponseEntity<Void> assignSubscriptionToUser(@PathVariable Long userId, @PathVariable Long subscriptionId, HeaderInfo headers) {
+        userService.assignSubscriptionToUser(userId, subscriptionId, headers);
+        return ResponseEntity.ok().build();
+
     }
 
-    @PutMapping("/{userId}/roles")
-    public ResponseEntity<Response<UserDto>> updateUserRoles(HeaderInfo headers, @PathVariable Long userId,
-                                                              @RequestBody List<RoleDto> roleDtoList) {
-        Response<UserDto> response = userService.updateUserRoles(userId, roleDtoList, headers);
-        return ResponseEntity.ok(response);
-    }
+
+
 
 
 

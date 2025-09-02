@@ -4,6 +4,7 @@ import com.neighbourly.user.dto.HeaderInfo;
 import com.neighbourly.user.dto.Response;
 import com.neighbourly.user.dto.RoleDto;
 import com.neighbourly.user.entity.Role;
+import com.neighbourly.user.entity.Subscription;
 import com.neighbourly.user.exception.RoleNotFoundException;
 import com.neighbourly.user.mapper.RoleMapper;
 import com.neighbourly.user.repository.RoleRepository;
@@ -74,7 +75,6 @@ public class RoleService {
     }
 
 
-
     public Response<Void> deleteRole(Long roleId, HeaderInfo headers) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RoleNotFoundException("Role not found with id: " + roleId));
@@ -84,4 +84,38 @@ public class RoleService {
                 .build();
     }
 
+    public void assignRoleToSubscription(Subscription subscription, Long roleId, HeaderInfo headers) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RoleNotFoundException("Role not found with id: " + roleId));
+
+        if (subscription.getSubscriptionRoles().stream().noneMatch(r -> r.getRole().getId().equals(roleId))) {
+            subscription.getSubscriptionRoles().add(
+                    com.neighbourly.user.entity.SubscriptionRole.builder()
+                            .subscription(subscription)
+                            .role(role)
+                            .build()
+            );
+
+        }
+    }
+
+    public void updateSubscriptionRoles(Subscription subscription, List<Long> roleIds, HeaderInfo headers) {
+
+        subscription.getSubscriptionRoles().clear();
+
+        List<Role> roles = roleRepository.findAllById(roleIds);
+
+        if (roles.size() != roleIds.size()) {
+            throw new RoleNotFoundException("One or more roles not found for the provided IDs");
+        }
+
+        for (Role role : roles) {
+                subscription.getSubscriptionRoles().add(
+                        com.neighbourly.user.entity.SubscriptionRole.builder()
+                                .subscription(subscription)
+                                .role(role)
+                                .build()
+                );
+        }
+    }
 }

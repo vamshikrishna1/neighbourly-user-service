@@ -37,5 +37,7 @@ public class UserSubscription {
     @Enumerated(EnumType.STRING)
     private SUBSCRIPTON_STATUS status;
 
+
+
     
 }
